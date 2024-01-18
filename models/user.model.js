@@ -8,11 +8,11 @@ class User {
         this.password = password;
     }
 
-    async createUser(username, password) {
+    async createUser(name, username, password) {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            const result = await db.one('INSERT INTO "Users" ("Username", "Password") VALUES ($1, $2) RETURNING "ID"', [username, hashedPassword]);
-            return result.ID;
+            const result = await db.one('INSERT INTO "Users" ("username", "password", "name") VALUES ($1, $2, $3) RETURNING "id"', [username, hashedPassword, name]);
+            return result;
         } catch (error) {
             if (error.code === '23505') {
                 throw new Error('Username already exists');
@@ -21,9 +21,31 @@ class User {
         }
     }
 
-    async getUser(username) {
+    async createGoogleUser(email, name) {
         try {
-            const result = await db.one('SELECT * FROM "Users" WHERE "Username" = $1', [username]);
+            const result = await db.one('INSERT INTO "Users" ("email", "name") VALUES ($1) RETURNING "id"', [email, name]);
+            return result;
+        } catch (error) {
+            if (error.code === '42601') {
+                const result = await this.getUserByEmail(email);
+                return result;
+            }
+            throw error;
+        }
+    }
+
+    async getUserByEmail(email) {
+        try {
+            const result = await db.one('SELECT * FROM "Users" WHERE "email" = $1', [email]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUserByUsername(username) {
+        try {
+            const result = await db.one('SELECT * FROM "Users" WHERE "username" = $1', [username]);
             return result;
         } catch (error) {
             throw error;
@@ -32,7 +54,7 @@ class User {
 
     async getUserById(id) {
         try {
-            const result = await db.one('SELECT * FROM "Users" WHERE "ID" = $1', [id]);
+            const result = await db.one('SELECT * FROM "Users" WHERE "id" = $1', [id]);
             return result;
         } catch (error) {
             throw error;
@@ -41,10 +63,10 @@ class User {
 
     async validateUser(username, password) {
         try {
-            const result = await db.one('SELECT * FROM "Users" WHERE "Username" = $1', [username]);
-            const match = await bcrypt.compare(password, result.Password);
+            const result = await this.getUserByUsername(username);
+            const match = await bcrypt.compare(password, result.password);
             if (match) {
-                return result.ID;
+                return result;
             }
             throw new Error('Invalid password');
         } catch (error) {
@@ -55,8 +77,8 @@ class User {
     async updateUser(id, username, password) {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            const result = await db.one('UPDATE "Users" SET "Username" = $1, "Password" = $2 WHERE "ID" = $3 RETURNING "ID"', [username, hashedPassword, id]);
-            return result.ID;
+            const result = await db.one('UPDATE "Users" SET "username" = $1, "password" = $2 WHERE "id" = $3 RETURNING "id"', [username, hashedPassword, id]);
+            return result.id;
         } catch (error) {
             throw error;
         }
@@ -64,8 +86,8 @@ class User {
 
     async deleteUser(id) {
         try {
-            const result = await db.one('DELETE FROM "Users" WHERE "ID" = $1 RETURNING "ID"', [id]);
-            return result.ID;
+            const result = await db.one('DELETE FROM "Users" WHERE "id" = $1 RETURNING "id"', [id]);
+            return result.id;
         } catch (error) {
             throw error;
         }

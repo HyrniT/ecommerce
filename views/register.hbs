@@ -1,4 +1,4 @@
-<section class="min-vh-100 d-flex align-items-center py-3" style="background-color: #508bfc;">
+<section class="min-vh-100 d-flex align-items-center py-3" style="background-color: #7fad39;">
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -8,6 +8,12 @@
                         <h3 class="text-center fs-1 mb-5">Register</h3>
 
                         <form id="register-form" method="post" action="/auth/register">
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="register-name">Your name</label>
+                                <input type="text" id="register-name" class="form-control form-control-lg" autocomplete="off" name="name"
+                                    value="{{messages.name}}" />
+                            </div>
+
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="register-username">Username</label>
                                 <input type="text" id="register-username" class="form-control form-control-lg" autocomplete="off" name="username"
@@ -29,7 +35,7 @@
                             {{> error}}
 
                             <div class="text-center mb-4">
-                                <button class="btn btn-primary btn-md btn-block w-100 py-2 fs-5"
+                                <button class="btn btn-secondary btn-md btn-block w-100 py-2 fs-5" 
                                     type="submit">Register</button>
                             </div>
                         </form>

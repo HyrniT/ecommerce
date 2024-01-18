@@ -11,53 +11,85 @@ module.exports = {
         res.render('login', { messages });
     },
     postRegister: async (req, res) => {
-        const { username, password, retypePassword } = req.body;
-        req.flash('username', username);
+        const { name, username, password, retypePassword } = req.body;
+
+        if (!name || !username || !password || !retypePassword) {
+            req.flash('error', 'Please enter all fields');
+            return res.redirect('/auth/register');
+        }
 
         if (password !== retypePassword) {
             req.flash('error', 'Passwords do not match');
             return res.redirect('/auth/register');
         }
+
+        if (password.length < 3) {
+            req.flash('error', 'Password must be at least 3 characters');
+            return res.redirect('/auth/register');
+        }
         
         try {
-            await userModel.createUser(username, password);
-            req.flash('success', 'Registration successful. You can now log in.');
+            await userModel.createUser(name.trim(), username.trim(), password);
             res.redirect('/auth/login');
         } catch (error) {
+            req.flash('name', name);
+            req.flash('username', username);
             req.flash('error', error.message);
             res.redirect('/auth/register');
         }
     },
-    // postLogin: async (req, res, next) => {
-    //     const handleRemember = () => {
-    //         if (req.body.remember) {
-    //         }
-    //     };
-
-    //     const authenticateMiddleware = passport.authenticate('local', {
-    //         successRedirect: '/',
+    // postLogin: (req, res) => {
+    //     passport.authenticate('google', {
     //         failureRedirect: '/auth/login',
+    //         successRedirect: '/',
     //         failureFlash: true,
-    //     });
-
-    //     const combinedMiddleware = (innerReq, innerRes, innerNext) => {
-    //         handleRemember();
-    //         authenticateMiddleware(innerReq, innerRes, innerNext);
-    //     };
-
-    //     combinedMiddleware(req, res, next);
+    //     })(req, res);
     // },
-    postLogin: (req, res, next) => {
+    postLogin: (req, res) => {
         passport.authenticate('local', async (err, user) => {
-            req.login(user, (err) => {
+            req.login(user, async (err) => {
                 if (err) {
                     req.flash('error', 'Invalid username or password');
+                    req.flash('username', req.body.username);
                     return res.redirect('/auth/login');
                 }
-                req.flash('success', 'Login successful.');
+                const _user = await userModel.getUserById(user);
+                req.flash('name', _user.name);
                 return res.redirect('/');
             });
-        })(req, res, next);
+        })(req, res);
     },
-
+    getLogout: (req, res) => {
+        req.logout((err) => {
+            if (err) {
+                return next(err);
+            }
+            res.redirect('/');
+        });
+    },
+    getGoogleLogin: (req, res) => {
+        passport.authenticate('google', {
+            scope: ['profile', 'email'],
+        })(req, res);
+    },
+    // getGoogleCallback: (req, res) => {
+    //     passport.authenticate('google', {
+    //         failureRedirect: '/auth/login',
+    //         successRedirect: '/',
+    //         failureFlash: true,
+    //     })(req, res);
+    // },
+    getGoogleCallback: (req, res) => {
+        passport.authenticate('google', async (err, user) => {
+            req.login(user, async (err) => {
+                if (err) {
+                    req.flash('error', 'Authentication failed');
+                    return res.redirect('/auth/login');
+                }
+                const _user = await userModel.getUserById(user);
+                req.flash('name', _user.name);
+                return res.redirect('/');
+            });
+        })(req, res);
+    },
 }

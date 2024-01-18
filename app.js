@@ -1,9 +1,8 @@
-// https://themewagon.github.io/ogani/#
-
 require('dotenv').config()
 const express = require('express')
 const handlebars = require('express-handlebars')
 const flash = require('express-flash')
+const cors = require('cors')
 const session = require('express-session')
 const passport = require('./utils/passport')
 const path = require('path')
@@ -19,6 +18,7 @@ app.use(session({
     cookie: { maxAge: 3 * 24 * 60 * 60 * 1000, httpOnly: true },
     resave: false,
 }))
+app.use(cors())
 app.use(flash())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -26,13 +26,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Middleware để truyền thông tin user và messages cho tất cả các route
 app.use((req, res, next) => {
-    res.locals.currentUser = req.session.passport ? req.session.passport.user : null;
-    console.log(res.locals.currentUser);
+    // res.locals.currentUser = req.session.passport ? req.session.passport.user : null;
     res.locals.messages = {
-        success: req.flash('success'),
         error: req.flash('error'),
+        name: req.flash('name'),
         username: req.flash('username'),
     };
     next();
@@ -46,6 +44,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 // app.use('/js', express.static(__dirname + 'public/js'))
 // app.use('/img', express.static(__dirname + 'public/img'))
 
+
 router(app)
 
-app.listen(port, () => console.log('Server started...'))
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});

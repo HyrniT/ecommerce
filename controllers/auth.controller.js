@@ -3,12 +3,18 @@ const passport = require('passport');
 
 module.exports = {
     getRegister: (req, res) => {
-        const messages = res.locals.messages;
-        res.render('register', { messages });
+        res.render('register', {
+            messages: res.locals.messages, 
+            title: 'Register',
+            layout: 'auth'
+        });
     },
     getLogin: (req, res) => {
-        const messages = res.locals.messages;
-        res.render('login', { messages });
+        res.render('login', { 
+            messages: res.locals.messages, 
+            title: 'Login',
+            layout: 'auth' 
+        });
     },
     postRegister: async (req, res) => {
         const { name, username, password, retypePassword } = req.body;

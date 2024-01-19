@@ -18,16 +18,14 @@ app.use(session({
     cookie: { maxAge: 3 * 24 * 60 * 60 * 1000, httpOnly: true },
     resave: false,
 }))
-app.use(cors())
-app.use(flash())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 app.use(passport.session())
-
+app.use(cors())
+app.use(flash())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use((req, res, next) => {
-    // res.locals.currentUser = req.session.passport ? req.session.passport.user : null;
     res.locals.messages = {
         error: req.flash('error'),
     };
@@ -37,10 +35,6 @@ app.use((req, res, next) => {
 app.engine('hbs', handlebars.engine({ extname: '.hbs', defaultLayout: 'main' }))
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')))
-// app.use('/css', express.static(__dirname + 'public/css'))
-// app.use('/js', express.static(__dirname + 'public/js'))
-// app.use('/img', express.static(__dirname + 'public/img'))
 
 
 router(app)

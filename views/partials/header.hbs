@@ -44,7 +44,7 @@
         </ul>
     </nav>
     <div id="mobile-menu-wrap"></div>
-    <div class="header__top__right__social" style="background-color: black;">
+    <div class="header__top__right__social">
         <a href="https://www.facebook.com/hyrn.312" target="_blank"><i class="fa fa-facebook"></i></a>
         <a href="https://www.linkedin.com/in/hyrnit/" target="_blank"><i class="fa fa-linkedin"></i></a>
     </div>
@@ -54,6 +54,11 @@
             <li>Free Shipping for all Order of $99</li>
         </ul>
     </div> --}}
+    {{#if name}}
+    <div class="text-center">
+        <a href="/auth/logout">Logout</a>
+    </div>
+    {{/if}}
 </div>
 <header class="header">
     <div class="header__top">

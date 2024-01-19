@@ -399,10 +399,6 @@ ol {
 	display: inline-block;
 }
 
-.header__menu {
-	padding: 24px 0;
-}
-
 .header__menu ul li {
 	list-style: none;
 	display: inline-block;

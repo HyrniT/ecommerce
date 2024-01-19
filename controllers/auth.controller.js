@@ -50,12 +50,19 @@ module.exports = {
     //     })(req, res);
     // },
     postLogin: (req, res) => {
-        passport.authenticate('local', async (err, user) => {
-            req.login(user, async (err) => {
+        passport.authenticate('local', async (err, id) => {
+            req.login(id, async (err) => {
                 if (err) {
                     req.flash('error', 'Invalid username or password');
                     return res.redirect('/auth/login');
                 }
+                // if (id === "admin") {
+                //     return res.render('admin', {
+                //         messages: res.locals.messages,
+                //         title: 'Admin',
+                //         layout: 'auth'
+                //     });
+                // }
                 return res.redirect('/');
             });
         })(req, res);
@@ -81,8 +88,8 @@ module.exports = {
     //     })(req, res);
     // },
     getGoogleCallback: (req, res) => {
-        passport.authenticate('google', async (err, user) => {
-            req.login(user, async (err) => {
+        passport.authenticate('google', async (err, id) => {
+            req.login(id, async (err) => {
                 if (err) {
                     req.flash('error', 'Authentication failed');
                     return res.redirect('/auth/login');

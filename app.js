@@ -30,8 +30,6 @@ app.use((req, res, next) => {
     // res.locals.currentUser = req.session.passport ? req.session.passport.user : null;
     res.locals.messages = {
         error: req.flash('error'),
-        name: req.flash('name'),
-        username: req.flash('username'),
     };
     next();
 });

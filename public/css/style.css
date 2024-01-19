@@ -349,13 +349,6 @@ ol {
 	margin-right: 4px;
 }
 
-.header__top__right__language span {
-	font-size: 14px;
-	color: #1c1c1c;
-	position: relative;
-	top: 2px;
-}
-
 .header__top__right__language ul {
 	background: #222222;
 	width: 100px;
@@ -422,7 +415,7 @@ ol {
 	left: 0;
 	top: 50px;
 	background: #222222;
-	width: 180px;
+	width: 150px;
 	z-index: 9;
 	padding: 5px 0;
 	-webkit-transition: all, 0.3s;

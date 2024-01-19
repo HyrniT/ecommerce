@@ -38,8 +38,6 @@ module.exports = {
             await userModel.createUser(name.trim(), username.trim(), password);
             res.redirect('/auth/login');
         } catch (error) {
-            req.flash('name', name);
-            req.flash('username', username);
             req.flash('error', error.message);
             res.redirect('/auth/register');
         }
@@ -56,11 +54,8 @@ module.exports = {
             req.login(user, async (err) => {
                 if (err) {
                     req.flash('error', 'Invalid username or password');
-                    req.flash('username', req.body.username);
                     return res.redirect('/auth/login');
                 }
-                const _user = await userModel.getUserById(user);
-                req.flash('name', _user.name);
                 return res.redirect('/');
             });
         })(req, res);
@@ -92,8 +87,6 @@ module.exports = {
                     req.flash('error', 'Authentication failed');
                     return res.redirect('/auth/login');
                 }
-                const _user = await userModel.getUserById(user);
-                req.flash('name', _user.name);
                 return res.redirect('/');
             });
         })(req, res);

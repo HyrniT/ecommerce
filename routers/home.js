@@ -8,6 +8,6 @@ const checkLoggedIn = (req, res, next) => {
     next();
 };
 
-router.get('/', checkLoggedIn, homeController.getHome);
+router.get('/', homeController.getHome);
 
 module.exports = router;

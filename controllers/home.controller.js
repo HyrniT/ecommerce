@@ -1,9 +1,9 @@
 module.exports = {
     getHome: (req, res) => {
         res.render('index', { 
-            messages: res.locals.messages, 
-            title: 'Home' ,
-            layout: 'auth'
+            title: 'Organi',
+            layout: 'main',
+            name: req.user ? req.user.name : null,
         });
     }
 }

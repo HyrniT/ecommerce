@@ -1,5 +1,4 @@
 // controllers/admin.controller.js
-
 module.exports = {
     getHome: (req, res) => {
         res.render('admin', { 
@@ -33,6 +32,11 @@ module.exports = {
             title: 'OGANI | Statistics',
             layout: 'auth',
             statistics: true,
+        });
+    },
+    postAddCategory: (req, res) => { 
+        res.status(200).json({
+            success: 'Files uploaded successfully.'
         });
     }
 }

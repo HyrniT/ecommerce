@@ -39,18 +39,25 @@ $(document).ready(function () {
         formData.append('desc', $('#desc').val());
         formData.append('image', $('#image')[0].files[0]);
 
-        fetch('/admin/add-category', {  
+        fetch('/admin/add-category', {
             method: 'POST',
             body: formData
         })
             .then(response => response.json())
             .then((data) => {
-                console.log(data);
                 $('#name').val('');
                 $('#desc').val('');
                 $('#image').val('');
+
+                if (data.message) {
+                    alert(data.message);
+                }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
     });
+
 
 });

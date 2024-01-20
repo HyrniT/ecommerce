@@ -1,3 +1,5 @@
+// controllers/auth.controller.js
+
 const userModel = require('../models/user.model');
 const passport = require('passport');
 
@@ -5,14 +7,14 @@ module.exports = {
     getRegister: (req, res) => {
         res.render('register', {
             messages: res.locals.messages, 
-            title: 'Register',
+            title: 'OGANI | Register',
             layout: 'auth'
         });
     },
     getLogin: (req, res) => {
         res.render('login', { 
             messages: res.locals.messages, 
-            title: 'Login',
+            title: 'OGANI | Login',
             layout: 'auth' 
         });
     },
@@ -50,19 +52,15 @@ module.exports = {
     //     })(req, res);
     // },
     postLogin: (req, res) => {
-        passport.authenticate('local', async (err, id) => {
-            req.login(id, async (err) => {
+        passport.authenticate('local', async (err, user) => {
+            req.login(user, async (err) => {
                 if (err) {
                     req.flash('error', 'Invalid username or password');
                     return res.redirect('/auth/login');
                 }
-                // if (id === "admin") {
-                //     return res.render('admin', {
-                //         messages: res.locals.messages,
-                //         title: 'Admin',
-                //         layout: 'auth'
-                //     });
-                // }
+                if (user.isAdmin) {
+                    return res.redirect('/admin');
+                }
                 return res.redirect('/');
             });
         })(req, res);

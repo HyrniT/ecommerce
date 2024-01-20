@@ -1,0 +1,70 @@
+{{!-- views/partials/admin/sidebar.hbs --}}
+
+<style>
+    #sidebar {
+        background-color: #fff;
+        height: 100vh;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    #sidebar li {
+        margin-bottom: 10px;
+    }
+
+    #sidebar a {
+        color: #000;
+        text-decoration: none;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+    }
+
+    .nav-icon {
+        margin-right: 10px;
+    }
+
+    .mt-auto {
+        margin-top: auto;
+    }
+</style>
+
+<nav id="sidebar" class="col-md-2 d-flex flex-column">
+    <div class="pt-3 text-white">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/admin/category" class="nav-link" id="category-link">
+                    <i class="fas fa-list nav-icon"></i> Categories
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/product" class="nav-link" id="product-link">
+                    <i class="fas fa-box nav-icon"></i> Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/user" class="nav-link" id="user-link">
+                    <i class="fas fa-user nav-icon"></i> Users
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/statistics" class="nav-link" id="statistics-link">
+                    <i class="fas fa-chart-bar nav-icon"></i> Statistics
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="mt-auto">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="/auth/logout" class="nav-link">
+                    <i class="fas fa-sign-out-alt nav-icon"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

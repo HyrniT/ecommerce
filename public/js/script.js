@@ -1,22 +1,21 @@
 $(document).ready(function () {
-    $("#googleSignInButton").click(function () {
-        window.location.href = "/auth/google";
+    $('#category-link, #product-link, #user-link, #statistics-link').on('click', function (event) {
+        event.preventDefault();
+        $('.nav-link').removeClass('active');
+        $(this).addClass('active');
+        loadContent($(this).attr('href'));
     });
+
+    function loadContent(url) {
+        $.ajax({
+            url: url,
+            method: 'GET',
+            success: function (data) {
+                $('#content').html(data);
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    }
 });
-// $(document).ready(function () {
-//     $("#googleSignInButton").click(function () {
-//         // Gửi yêu cầu đến server khi nút được nhấn
-//         $.ajax({
-//             url: "/auth/google", // Đường dẫn tới endpoint trên server
-//             method: "GET", // Hoặc "POST" tùy thuộc vào yêu cầu của bạn
-//             success: function (data) {
-//                 // Xử lý kết quả từ server nếu cần thiết
-//                 console.log("Request sent successfully", data);
-//             },
-//             error: function (error) {
-//                 // Xử lý lỗi nếu có
-//                 console.error("Error sending request", error);
-//             }
-//         });
-//     });
-// });

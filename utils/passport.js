@@ -10,6 +10,7 @@ passport.use(new LocalStrategy(
     async (username, password, done) => {
         try {
             const user = await userModel.validateUser(username, password);
+            user.isAdmin = user.username === 'admin';
             return done(null, user);
         } catch (error) {
             return done(error);
@@ -39,6 +40,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     userModel.getUserById(id)
         .then(user => {
+            user.isAdmin = user.username === 'admin';
             done(null, user);
         })
         .catch(err => {

@@ -34,5 +34,6 @@ router.get('/product', checkLoggedIn, checkIsAdmin, adminController.getProduct);
 router.get('/user', checkLoggedIn, checkIsAdmin, adminController.getUser);
 router.get('/statistics', checkLoggedIn, checkIsAdmin, adminController.getStatistics);
 router.post('/add-category', upload.single('image'), adminController.postAddCategory);
+router.post('/edit-category', upload.single('image'), adminController.postEditCategory);
 
 module.exports = router;

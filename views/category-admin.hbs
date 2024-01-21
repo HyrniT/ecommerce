@@ -1,4 +1,4 @@
-{{!-- views/partials/admin/category.hbs --}}
+{{!-- views/partials/admin/category-admin.hbs --}}
 
 <h3 class="mt-5">Categories</h3>
 <div class="container mt-1">
@@ -13,9 +13,9 @@
         </thead>
         <tbody>
             {{#each categories}}
-            <tr id="{{id}}">
+            <tr id="categoryRow-{{id}}">
                 <td>{{name}}</td>
-                <td>{{desc}}</td>
+                <td style="max-width: 600px; overflow: hidden; text-overflow: ellipsis;">{{desc}}</td>
                 <td><img src="{{img}}" alt="{{name}}" class="img-fluid" style="max-width: 100px;"></td>
                 <td>
                     <button class="btn btn-primary" onclick="editCategory('{{id}}')">
@@ -83,19 +83,74 @@
         </form>
     </div>
 </div>
-
 <script>
     function editCategory(categoryId) {
-        const name = $(`#${categoryId} td:nth-child(1)`).text();
-        const desc = $(`#${categoryId} td:nth-child(2)`).text();
+        const name = $(`#categoryRow-${categoryId} td:nth-child(1)`).text();
+        const desc = $(`#categoryRow-${categoryId} td:nth-child(2)`).text();
+
+        $('[id^="categoryRow-"]').removeClass('table-primary');
 
         $('#editName').val(name);
         $('#editDesc').val(desc);
 
+        $(`#categoryRow-${categoryId}`).addClass('table-primary');
+
+        $('#editCategoryFormContainer').attr('categoryId', categoryId);
+
         $('#editCategoryFormContainer').collapse('show');
     }
+
+    $('#editCategoryForm').submit(function (event) {
+        event.preventDefault();
+
+        const categoryId = $('#editCategoryFormContainer').attr('categoryId');
+        const formData = new FormData();
+        formData.append('id', categoryId);
+        formData.append('name', $('#editName').val());
+        formData.append('desc', $('#editDesc').val());
+        formData.append('image', $('#editImage')[0].files[0]);
+
+        fetch('/admin/edit-category', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then((data) => {
+                $('#content').html(data);
+                alert('Category updated successfully.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
+    });
 
     function deleteCategory(categoryId) {
 
     }
+
+
+
+    $("#addCategoryForm").submit(function (event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('name', $('#name').val());
+        formData.append('desc', $('#desc').val());
+        formData.append('image', $('#image')[0].files[0]);
+
+        fetch('/admin/add-category', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then((data) => {
+                $('#content').html(data);
+                alert('Category added successfully.');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
+    });
 </script>

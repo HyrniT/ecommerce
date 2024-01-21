@@ -23,33 +23,17 @@ $(document).ready(function () {
         });
     }
 
-    
+    checkScreenSize(); // Load page
 
-    $("#addCategoryForm").submit(function (event) {
-        event.preventDefault();
-
-        const formData = new FormData();
-        formData.append('name', $('#name').val());
-        formData.append('desc', $('#desc').val());
-        formData.append('image', $('#image')[0].files[0]);
-
-        fetch('/admin/add-category', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.text())
-            .then((data) => {
-                $('#name').val('');
-                $('#desc').val('');
-                $('#image').val('');
-                $('#content').html(data);
-                alert('Category uploaded successfully.');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while processing your request.');
-            });
+    $(window).resize(function () { // Resize page
+        checkScreenSize();
     });
 
-
+    function checkScreenSize() {
+        if ($(window).width() >= 768) {
+            $('#sidebar').addClass('fixed-top');
+        } else {
+            $('#sidebar').removeClass('fixed-top');
+        }
+    }
 });

@@ -24,6 +24,12 @@
         border-radius: 5px;
     }
 
+    @media (max-width: 768px) {
+        #sidebar {
+            height: auto;
+        }
+    }
+
     .nav-icon {
         margin-right: 10px;
     }
@@ -33,7 +39,7 @@
     }
 </style>
 
-<nav id="sidebar" class="col-md-2 d-flex flex-column">
+<nav id="sidebar" class="col-md-2 fixed-top d-flex flex-column">
     <div class="py-3 text-white">
         <div class="header__logo text-center">
             <img src="img/logo.png" alt="logo">

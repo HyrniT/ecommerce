@@ -25,6 +25,29 @@ class Category {
             throw error;
         }
     }
+
+    async getCategoryById(id) {
+        try {
+            const result = await db.one('SELECT * FROM "Categories" WHERE "id" = $1', [id]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateCategory(id, name, desc, img) {
+        try {
+            if (img) {
+                const result = await db.result('UPDATE "Categories" SET "name" = $1, "desc" = $2, "img" = $3 WHERE "id" = $4', [name, desc, img, id]);
+                return result;
+            } else {
+                const result = await db.result('UPDATE "Categories" SET "name" = $1, "desc" = $2 WHERE "id" = $3', [name, desc, id]);
+                return result;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new Category();

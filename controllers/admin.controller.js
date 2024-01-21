@@ -10,11 +10,13 @@ module.exports = {
             layout: 'admin',
         });
     },
-    getCategory: (req, res) => {
+    getCategory: async (req, res) => {
+        const categories = await categoryModel.getAllCategories();
         res.render('admin', { 
             title: 'OGANI | Categories Management',
             layout: 'auth',
             category: true,
+            categories: categories,
         });
     },
     getProduct: (req, res) => {
@@ -42,16 +44,17 @@ module.exports = {
         try {
             const name = req.body.name.trim();
             const desc = req.body.desc.trim();
-            const img = req.file.filename;
+            const img = path.join('/img/uploads', req.file.filename);
+
+            const categories = await categoryModel.getAllCategories();
+            console.log(categories);
 
             await categoryModel.saveCategory(name, desc, img);
 
-            res.status(200).json({
-                message: 'Category uploaded successfully.',
-            });
+            res.redirect('/admin/category');
         } catch (error) {
             console.error('Error:', error);
-            res.status(500).json({
+            res.status(500).send({
                 message: 'Internal server error.'
             });
         }

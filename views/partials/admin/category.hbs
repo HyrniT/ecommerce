@@ -1,6 +1,6 @@
 {{!-- views/partials/admin/category.hbs --}}
 
-<h3 class="mt-5">Edit category</h3>
+<h3 class="mt-5">Categories</h3>
 <div class="container mt-1">
     <table class="table">
         <thead>
@@ -13,10 +13,10 @@
         </thead>
         <tbody>
             {{#each categories}}
-            <tr>
+            <tr id="{{id}}">
                 <td>{{name}}</td>
                 <td>{{desc}}</td>
-                <td><img src="{{image}}" alt="{{name}}" class="img-fluid" style="max-width: 100px;"></td>
+                <td><img src="{{img}}" alt="{{name}}" class="img-fluid" style="max-width: 100px;"></td>
                 <td>
                     <button class="btn btn-primary" onclick="editCategory('{{id}}')">
                         <i class="fas fa-edit"></i>
@@ -31,6 +31,30 @@
     </table>
 </div>
 
+<div class="container mt-3 collapse" id="editCategoryFormContainer">
+    <h5>Edit category</h5>
+    <div class="card card-body">
+        <form id="editCategoryForm" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="editName" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="editName" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="editDesc" class="form-label">Description:</label>
+                <input type="text" class="form-control" id="editDesc" name="desc">
+            </div>
+
+            <div class="mb-3">
+                <label for="editImage" class="form-label">Image:</label>
+                <input type="file" class="form-control" id="editImage" name="image" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
+
 <p class="mt-3">
     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="collapse"
         data-bs-target="#addCategoryFormContainer" aria-expanded="false" aria-controls="addCategoryFormContainer">
@@ -39,7 +63,7 @@
 </p>
 <div class="container mt-3 collapse" id="addCategoryFormContainer">
     <div class="card card-body">
-        <form id="addCategoryForm" method="post" action="/admin/add-category" enctype="multipart/form-data">
+        <form id="addCategoryForm" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
                 <input type="text" class="form-control" id="name" name="name" required>
@@ -59,3 +83,19 @@
         </form>
     </div>
 </div>
+
+<script>
+    function editCategory(categoryId) {
+        const name = $(`#${categoryId} td:nth-child(1)`).text();
+        const desc = $(`#${categoryId} td:nth-child(2)`).text();
+
+        $('#editName').val(name);
+        $('#editDesc').val(desc);
+
+        $('#editCategoryFormContainer').collapse('show');
+    }
+
+    function deleteCategory(categoryId) {
+
+    }
+</script>

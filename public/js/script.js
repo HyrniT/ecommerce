@@ -23,13 +23,7 @@ $(document).ready(function () {
         });
     }
 
-    function editCategory(categoryId) {
-
-    }
-
-    function deleteCategory(categoryId) {
-
-    }
+    
 
     $("#addCategoryForm").submit(function (event) {
         event.preventDefault();
@@ -43,15 +37,13 @@ $(document).ready(function () {
             method: 'POST',
             body: formData
         })
-            .then(response => response.json())
+            .then(response => response.text())
             .then((data) => {
                 $('#name').val('');
                 $('#desc').val('');
                 $('#image').val('');
-
-                if (data.message) {
-                    alert(data.message);
-                }
+                $('#content').html(data);
+                alert('Category uploaded successfully.');
             })
             .catch(error => {
                 console.error('Error:', error);

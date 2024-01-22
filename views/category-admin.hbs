@@ -126,10 +126,16 @@
     });
 
     function deleteCategory(categoryId) {
+        const confirmDelete = window.confirm("Are you sure you want to delete this category?");
 
+        if (confirmDelete) {
+            // Gọi hàm xóa dữ liệu trên server với categoryId
+            // CODE HERE
+
+            const categoryRow = $(`#categoryRow_${categoryId}`);
+            categoryRow.remove();
+        }
     }
-
-
 
     $("#addCategoryForm").submit(function (event) {
         event.preventDefault();

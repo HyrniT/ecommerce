@@ -60,9 +60,45 @@ class Product {
         }
     }
 
+    async getTotalNumberOfProductsByCategory(categoryId) {
+        try {
+            const result = await db.one('SELECT COUNT(*) FROM "Products" WHERE "category_id" = $1', [categoryId]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getProductInPage(page, perPage) {
         try {
             const result = await db.any('SELECT * FROM "Products" LIMIT $1 OFFSET $2', [perPage, (page - 1) * perPage]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductInPageByCategory(page, perPage, categoryId) {
+        try {
+            const result = await db.any('SELECT * FROM "Products" WHERE "category_id" = $1 LIMIT $2 OFFSET $3', [categoryId, perPage, (page - 1) * perPage]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteProduct(id) {
+        try {
+            const result = await db.result('DELETE FROM "Products" WHERE "id" = $1', [id]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductByCategory(categoryId) {
+        try {
+            const result = await db.any('SELECT * FROM "Products" WHERE "category_id" = $1', [categoryId]);
             return result;
         } catch (error) {
             throw error;

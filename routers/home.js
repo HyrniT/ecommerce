@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 const homeController = require('../controllers/home.controller');
+const categoryController = require('../controllers/category.controller');
 
 const checkLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -19,5 +20,6 @@ const checkIsAdmin = (req, res, next) => {
 
 router.get('/', checkIsAdmin, homeController.getHome);
 router.get('/shop', checkIsAdmin, homeController.getShop);
+router.get('/category', checkIsAdmin, categoryController.getProductByCategory);
 
 module.exports = router;

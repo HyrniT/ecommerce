@@ -1,3 +1,71 @@
-{{> hero}}
-{{> categories}}
-{{> products}}
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero__item set-bg" data-setbg="img/hero/banner.jpg">
+                    <div class="hero__text">
+                        <span>FRUIT FRESH</span>
+                        <h2>Vegetable <br />100% Organic</h2>
+                        <p>Free Pickup and Delivery Available</p>
+                        <a href="#" class="primary-btn">SHOP NOW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+                {{#each categories}}
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="{{img}}">
+                        <h5><a href="/category?id={{id}}">{{name}}</a></h5>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Featured Products</h2>
+                </div>
+                <div class="featured__controls">
+                    <ul>
+                        <li class="active" data-filter="*">All</li>
+                        {{#each categories}}
+                        <li data-filter=".cat_{{id}}">{{name}}</li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row featured__filter">
+            {{#each products}}
+            <div class="col-lg-3 col-md-4 col-sm-6 mix cat_{{category_id}}">
+                <div class="featured__item">
+                    <div class="featured__item__pic set-bg" data-setbg="{{img}}">
+                        <ul class="featured__item__pic__hover">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="/product/{{id}}"><i class="fa-solid fa-eye"></i></a></li>
+                            <li><a href="#" onclick="addToCart('{{id}}')"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="featured__item__text">
+                        <h6><a href="/product/{{id}}">{{name}}</a></h6>
+                        <h5>{{price}}</h5>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>

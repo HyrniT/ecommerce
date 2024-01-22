@@ -18,5 +18,6 @@ const checkIsAdmin = (req, res, next) => {
 };
 
 router.get('/', checkIsAdmin, homeController.getHome);
+router.get('/shop', checkIsAdmin, homeController.getShop);
 
 module.exports = router;

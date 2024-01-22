@@ -50,6 +50,24 @@ class Product {
             throw error;
         }
     }
+
+    async getTotalNumberOfProducts() {
+        try {
+            const result = await db.one('SELECT COUNT(*) FROM "Products"');
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductInPage(page, perPage) {
+        try {
+            const result = await db.any('SELECT * FROM "Products" LIMIT $1 OFFSET $2', [perPage, (page - 1) * perPage]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new Product();

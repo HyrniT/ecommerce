@@ -21,5 +21,6 @@ const checkIsAdmin = (req, res, next) => {
 router.get('/', checkIsAdmin, homeController.getHome);
 router.get('/shop', checkIsAdmin, homeController.getShop);
 router.get('/category', checkIsAdmin, categoryController.getProductByCategory);
+router.get('/search', checkIsAdmin, homeController.getSearch);
 
 module.exports = router;

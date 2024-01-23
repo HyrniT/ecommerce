@@ -33,5 +33,24 @@ module.exports = {
             totalPages: totalPages,
             currentPage: page
         });
+    },
+    getSearch: async (req, res) => {
+        const keyword = req.query.keyword.toLowerCase();
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 9;
+
+        const totalProducts = await productModel.getTotalNumberOfProductsByName(keyword);
+        const totalPages = Math.ceil(totalProducts.count / perPage);
+        const products = await productModel.getProductInPageByName(page, perPage, keyword);
+
+        res.render('search', { 
+            keyword: keyword,
+            title: 'OGANI | Searching',
+            name: req.user ? req.user.name : null,
+            products: products,
+            totalProducts: totalProducts.count,
+            totalPages: totalPages,
+            currentPage: page
+        });
     }
 }

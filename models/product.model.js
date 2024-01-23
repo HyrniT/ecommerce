@@ -104,6 +104,24 @@ class Product {
             throw error;
         }
     }
+
+    async getTotalNumberOfProductsByName(name) {
+        try {
+            const result = await db.one('SELECT COUNT(*) FROM "Products" WHERE LOWER("name") LIKE $1', ['%' + name + '%']);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductInPageByName(page, perPage, name) {
+        try {
+            const result = await db.any('SELECT * FROM "Products" WHERE LOWER("name") LIKE $1 LIMIT $2 OFFSET $3', ['%' + name + '%', perPage, (page - 1) * perPage]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new Product();

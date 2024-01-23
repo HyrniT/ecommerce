@@ -57,5 +57,24 @@ module.exports = {
             totalPages: totalPages,
             currentPage: page
         });
+    },
+    getProduct: async (req, res) => {
+        const id = req.query.id;
+        const product = await productModel.getProductById(id);
+        const relatedProducts = await productModel.getRelatedProducts(product.category_id, id);
+        console.log(relatedProducts);
+
+        res.render('details', {
+            shop: true,
+            title: 'OGANI | Shop',
+            name: req.user ? req.user.name : null,
+            relatedProducts: relatedProducts,
+            id: id,
+            name: product.name,
+            price: product.price,
+            desc: product.desc,
+            img: product.img,
+            quantity: product.quantity,
+        });
     }
 }

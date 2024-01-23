@@ -140,6 +140,15 @@ class Product {
             throw error;
         }
     }
+
+    async getRelatedProducts(categoryId, id) {
+        try {
+            const result = await db.any('SELECT * FROM "Products" WHERE "category_id" = $1 AND "id" != $2 LIMIT 4', [categoryId, id]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new Product();

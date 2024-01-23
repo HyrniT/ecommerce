@@ -181,11 +181,13 @@
         const confirmDelete = window.confirm("Are you sure you want to delete this category?");
 
         if (confirmDelete) {
-            fetch(`/admin/delete-category/${categoryId}`, {
-                method: 'DELETE'
+            fetch(`/admin/delete-category?id=${categoryId}`, {
+                method: 'GET'
             })
                 .then(response => {
                     if (response.status === 200) {
+                        const categoryRow = $(`#categoryRow-${categoryId}`);
+                        categoryRow.remove();
                         alert('Category deleted successfully.');
                     }
                 })
@@ -193,9 +195,6 @@
                     console.error('Error:', error);
                     alert('An error occurred while processing your request.');
                 });
-
-            const categoryRow = $(`#categoryRow-${categoryId}`);
-            categoryRow.remove();
         }
     }
 

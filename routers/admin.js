@@ -29,12 +29,18 @@ const checkIsAdmin = (req, res, next) => {
 // }
 
 router.get('/', checkLoggedIn, checkIsAdmin, adminController.getHome);
+
 router.get('/category', checkLoggedIn, checkIsAdmin, adminController.getCategory);
-router.get('/product', checkLoggedIn, checkIsAdmin, adminController.getProduct);
-router.get('/user', checkLoggedIn, checkIsAdmin, adminController.getUser);
-router.get('/statistics', checkLoggedIn, checkIsAdmin, adminController.getStatistics);
 router.post('/add-category', checkLoggedIn, checkIsAdmin, upload.single('image'), adminController.postAddCategory);
 router.post('/edit-category', checkLoggedIn, checkIsAdmin, upload.single('image'), adminController.postEditCategory);
-router.delete('/delete-category/:id', checkLoggedIn, checkIsAdmin, adminController.deleteCategory);
+router.get('/delete-category', checkLoggedIn, checkIsAdmin, adminController.deleteCategory);
+
+router.get('/product', checkLoggedIn, checkIsAdmin, adminController.getProduct);
+router.post('/add-product', checkLoggedIn, checkIsAdmin, upload.single('image'), adminController.postAddProduct);
+router.post('/edit-product', checkLoggedIn, checkIsAdmin, upload.single('image'), adminController.postEditProduct);
+router.get('/delete-product', checkLoggedIn, checkIsAdmin, adminController.deleteProduct);
+
+router.get('/user', checkLoggedIn, checkIsAdmin, adminController.getUser);
+router.get('/statistics', checkLoggedIn, checkIsAdmin, adminController.getStatistics);
 
 module.exports = router;

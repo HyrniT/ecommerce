@@ -6,13 +6,13 @@ class Product {
         this.price = price;
         this.desc = desc;
         this.img = img;
-        this.categoryId = categoryId;
         this.quantity = quantity;
+        this.categoryId = categoryId;
     }
 
     async saveProduct(name, desc, price, img, quantity, categoryId) {
         try {
-            const result = await db.one('INSERT INTO "Products" ("name", "desc", "price", "img", "quantity", "category_id") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"', [name, price, desc, img, quantity, categoryId]);
+            const result = await db.one('INSERT INTO "Products" ("name", "desc", "price", "img", "quantity", "category_id") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"', [name, desc, price, img, quantity, categoryId]);
             return result;
         } catch (error) {
             throw error;
@@ -21,7 +21,11 @@ class Product {
 
     async getAllProducts() {
         try {
-            const result = await db.any('SELECT * FROM "Products"');
+            const result = await db.any(`
+                SELECT "Products".*, "Categories"."name" AS category_name
+                FROM "Products"
+                INNER JOIN "Categories" ON "Products"."category_id" = "Categories"."id"
+            `);
             return result;
         } catch (error) {
             throw error;
@@ -31,6 +35,20 @@ class Product {
     async getProductById(id) {
         try {
             const result = await db.one('SELECT * FROM "Products" WHERE "id" = $1', [id]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getProductsInPage(page, perPage) {
+        try {
+            const result = await db.any(`
+                SELECT "Products".*, "Categories"."name" AS category_name
+                FROM "Products"
+                INNER JOIN "Categories" ON "Products"."category_id" = "Categories"."id"
+                LIMIT $1 OFFSET $2
+            `, [perPage, (page - 1) * perPage]);
             return result;
         } catch (error) {
             throw error;

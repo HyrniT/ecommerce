@@ -1,6 +1,7 @@
 // controllers/admin.controller.js
 
 const categoryModel = require('../models/category.model');
+const productModel = require('../models/product.model');
 const path = require('path');
 const fs = require('fs');
 
@@ -26,10 +27,21 @@ module.exports = {
             currentPage: page
         });
     },
-    getProduct: (req, res) => {
-        res.render('product-admin', { 
-            title: 'OGANI | Products Management',
+    getProduct: async (req, res) => {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 5;
+
+        const totalProducts = await productModel.getTotalNumberOfProducts();
+        const totalPages = Math.ceil(totalProducts.count / perPage);
+        const products = await productModel.getProductsInPage(page, perPage);
+        const categories = await categoryModel.getAllCategories();
+
+        res.render('product-admin', {
             layout: '_',
+            products: products,
+            categories: categories,
+            totalPages: totalPages,
+            currentPage: page
         });
     },
     getUser: (req, res) => {
@@ -91,9 +103,7 @@ module.exports = {
     },
     deleteCategory: async (req, res) => {
         try {
-            const id = req.params.id;
-            console.log("Id: " + id);
-
+            const id = req.query.id;
             const category = await categoryModel.getCategoryById(id);
             const imgPath = category.img;
 
@@ -102,6 +112,80 @@ module.exports = {
             }
 
             await categoryModel.deleteCategory(id);
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    postAddProduct: async (req, res) => {
+        try {
+            const name = req.body.name.trim();
+            const desc = req.body.desc.trim();
+            const price = req.body.price;
+            const img = 'img/uploads/' + req.file.filename; 
+            const quantity = req.body.quantity;
+            const categoryId = req.body.categoryId;
+
+            await productModel.saveProduct(name, desc, price, img, quantity, categoryId);
+
+            res.redirect('/admin/product');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    postEditProduct: async (req, res) => {
+        try {
+            const id = req.body.id;
+            const name = req.body.name.trim();
+            const desc = req.body.desc.trim();
+            const price = req.body.price;
+            const quantity = req.body.quantity;
+            const categoryId = req.body.categoryId;
+
+            const product = await productModel.getProductById(id);
+            const oldImgPath = product.img;
+
+            if (req.file) {
+                const img = 'img/uploads/' + req.file.filename; 
+
+                if (oldImgPath) {
+                    fs.unlinkSync(path.join(__dirname, '../public', oldImgPath));
+                }
+
+                await productModel.updateProduct(id, name, desc, price, img, quantity, categoryId);
+            } else {
+                await productModel.updateProduct(id, name, desc, price, null, quantity, categoryId);
+            }
+
+            res.redirect('/admin/product');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    deleteProduct: async (req, res) => {
+        try {
+            const id = req.query.id;
+            const product = await productModel.getProductById(id);
+            const imgPath = product.img;
+
+            if (imgPath) {
+                fs.unlinkSync(path.join(__dirname, '../public', imgPath));
+            }
+
+            await productModel.deleteProduct(id)
+            .then(() => {
+                res.status(200).send({
+                    message: 'Product deleted successfully.'
+                });
+            })
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send({

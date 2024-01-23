@@ -102,7 +102,7 @@
         pages.forEach(page => {
             const pagination = `
             <li class="page-item ${page === currentPage ? 'active' : ''}">
-                <span class="page-link" href="javascript:void(0);" onclick="loadPage(${page})">${page}</span>
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(${page})">${page}</a>
             </li>
             `;
 
@@ -111,8 +111,19 @@
     });
 
     function loadPage(page) {
-        console.log(`Loading page ${page}`);
-        fetch(`/admin/category?page=${page}`, {
+        $.ajax({
+            url: `/admin/category?page=${page}`,
+            method: 'GET',
+            dataType: 'html',
+            success: function (data) {
+                $('#content').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        });
+        {{!-- fetch(`/admin/category?page=${page}`, {
             method: 'GET',
         })
             .then(response => response.text())
@@ -122,7 +133,7 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('An error occurred while processing your request.');
-            });
+            }); --}}
     }
 
     function editCategory(categoryId) {

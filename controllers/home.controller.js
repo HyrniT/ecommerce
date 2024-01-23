@@ -44,13 +44,15 @@ module.exports = {
         const totalProducts = await productModel.getTotalNumberOfProductsByName(keyword);
         const totalPages = Math.ceil(totalProducts.count / perPage);
         const products = await productModel.getProductInPageByName(page, perPage, keyword);
+        const categories = await categoryModel.getAllCategories();
 
         res.render('search', { 
             shop: true,
             keyword: keyword,
-            title: 'OGANI | Searching',
+            title: 'OGANI | Shop',
             name: req.user ? req.user.name : null,
             products: products,
+            categories: categories,
             totalProducts: totalProducts.count,
             totalPages: totalPages,
             currentPage: page

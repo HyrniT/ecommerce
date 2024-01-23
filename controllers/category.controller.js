@@ -17,6 +17,7 @@ module.exports = {
 
         res.render('category', {
             id: id,
+            shop: true,
             title: 'OGANI | ' + category.name,
             name: req.user ? req.user.name : null,
             nameCategory: category.name,

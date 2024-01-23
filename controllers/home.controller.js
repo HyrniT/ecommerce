@@ -9,6 +9,7 @@ module.exports = {
         const products = await productModel.getAllProducts();
 
         res.render('index', { 
+            home: true,
             title: 'OGANI | Home',
             name: req.user ? req.user.name : null,
             categories: categories,
@@ -25,6 +26,7 @@ module.exports = {
         const categories = await categoryModel.getAllCategories();
 
         res.render('shop', { 
+            shop: true,
             title: 'OGANI | Shop',
             name: req.user ? req.user.name : null,
             categories: categories,
@@ -44,6 +46,7 @@ module.exports = {
         const products = await productModel.getProductInPageByName(page, perPage, keyword);
 
         res.render('search', { 
+            shop: true,
             keyword: keyword,
             title: 'OGANI | Searching',
             name: req.user ? req.user.name : null,

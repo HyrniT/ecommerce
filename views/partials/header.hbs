@@ -3,13 +3,6 @@
     <div class="humberger__menu__logo">
         <a href="#"><img src="img/logo.png" alt=""></a>
     </div>
-    {{!-- <div class="humberger__menu__cart">
-        <ul>
-            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-        </ul>
-        <div class="header__cart__price">item: <span>$150.00</span></div>
-    </div> --}}
     <div class="humberger__menu__widget">
         <div class="header__top__right__language">
             <img src="img/language.png" alt="">
@@ -47,12 +40,6 @@
         <a href="https://www.facebook.com/hyrn.312" target="_blank"><i class="fa fa-facebook"></i></a>
         <a href="https://www.linkedin.com/in/hyrnit/" target="_blank"><i class="fa fa-linkedin"></i></a>
     </div>
-    {{!-- <div class="humberger__menu__contact">
-        <ul>
-            <li><i class="fa fa-envelope"></i> ngqghien.com</li>
-            <li>Free Shipping for all Order of $99</li>
-        </ul>
-    </div> --}}
     {{#if name}}
     <div class="text-center">
         <a href="/auth/logout">Logout</a>
@@ -64,12 +51,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-6">
-                    {{!-- <div class="header__top__left">
-                        <ul>
-                            <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                            <li>Free Shipping for all Order of $99</li>
-                        </ul>
-                    </div> --}}
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="header__top__right">
@@ -120,8 +101,8 @@
                 <div class="col-lg-6">
                     <nav class="header__menu" style="padding: 24px 0;">
                         <ul>
-                            <li class="active"><a href="/">Home</a></li>
-                            <li><a href="/shop">Shop</a></li>
+                            <li{{#if home}} class="active" {{/if}}><a href="/">Home</a></li>
+                            <li{{#if shop}} class="active" {{/if}}><a href="/shop">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>

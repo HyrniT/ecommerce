@@ -48,6 +48,15 @@ class Category {
             throw error;
         }
     }
+
+    async deleteCategory(id) {
+        try {
+            const result = await db.result('DELETE FROM "Categories" WHERE "id" = $1', [id]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new Category();

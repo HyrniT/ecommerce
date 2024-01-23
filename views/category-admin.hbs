@@ -129,10 +129,20 @@
         const confirmDelete = window.confirm("Are you sure you want to delete this category?");
 
         if (confirmDelete) {
-            // Gọi hàm xóa dữ liệu trên server với categoryId
-            // CODE HERE
+            fetch(`/admin/delete-category/${categoryId}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        alert('Category deleted successfully.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your request.');
+                });
 
-            const categoryRow = $(`#categoryRow_${categoryId}`);
+            const categoryRow = $(`#categoryRow-${categoryId}`);
             categoryRow.remove();
         }
     }

@@ -74,8 +74,27 @@ module.exports = {
                 await categoryModel.updateCategory(id, name, desc, null);
             }
 
-
             res.redirect('/admin/category');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    deleteCategory: async (req, res) => {
+        try {
+            const id = req.params.id;
+            console.log("Id: " + id);
+
+            const category = await categoryModel.getCategoryById(id);
+            const imgPath = category.img;
+
+            if (imgPath) {
+                fs.unlinkSync(path.join(__dirname, '../public', imgPath));
+            }
+
+            await categoryModel.deleteCategory(id);
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send({

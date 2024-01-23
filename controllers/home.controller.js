@@ -62,7 +62,6 @@ module.exports = {
         const id = req.query.id;
         const product = await productModel.getProductById(id);
         const relatedProducts = await productModel.getRelatedProducts(product.category_id, id);
-        console.log(relatedProducts);
 
         res.render('details', {
             shop: true,

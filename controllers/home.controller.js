@@ -69,7 +69,7 @@ module.exports = {
             name: req.user ? req.user.name : null,
             relatedProducts: relatedProducts,
             id: id,
-            name: product.name,
+            nameProduct: product.name,
             price: product.price,
             desc: product.desc,
             img: product.img,

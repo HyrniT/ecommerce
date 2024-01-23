@@ -12,11 +12,18 @@ module.exports = {
         });
     },
     getCategory: async (req, res) => {
-        const categories = await categoryModel.getAllCategories();
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 3;
+
+        const totalCategories = await categoryModel.getTotalNumberOfCategories();
+        const totalPages = Math.ceil(totalCategories.count / perPage);
+        const categories = await categoryModel.getCategoriesInPage(page, perPage);
+
         res.render('category-admin', { 
-            title: 'OGANI | Categories Management',
             layout: '_',
             categories: categories,
+            totalPages: totalPages,
+            currentPage: page
         });
     },
     getProduct: (req, res) => {
@@ -41,7 +48,7 @@ module.exports = {
         try {
             const name = req.body.name.trim();
             const desc = req.body.desc.trim();
-            const img = path.join('/img/uploads', req.file.filename);
+            const img = 'img/uploads/' + req.file.filename; 
 
             await categoryModel.saveCategory(name, desc, img);
 
@@ -63,7 +70,7 @@ module.exports = {
             const oldImgPath = category.img;
 
             if (req.file) {
-                const img = path.join('/img/uploads', req.file.filename);
+                const img = 'img/uploads/' + req.file.filename; 
 
                 if (oldImgPath) {
                     fs.unlinkSync(path.join(__dirname, '../public', oldImgPath));

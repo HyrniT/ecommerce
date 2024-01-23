@@ -17,9 +17,27 @@ class Category {
         }
     }
 
+    async getTotalNumberOfCategories() {
+        try {
+            const result = await db.one('SELECT COUNT(*) FROM "Categories"');
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getAllCategories() {
         try {
             const result = await db.any('SELECT * FROM "Categories"');
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCategoriesInPage(page, perPage) {
+        try {
+            const result = await db.any('SELECT * FROM "Categories" ORDER BY "id" LIMIT $1 OFFSET $2', [perPage, (page - 1) * perPage]);
             return result;
         } catch (error) {
             throw error;

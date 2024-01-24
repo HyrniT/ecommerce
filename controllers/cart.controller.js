@@ -45,5 +45,13 @@ module.exports = {
         } catch (error) {
             console.error('Error:', error);
         }
+    },
+    getTotalCarts: async (req, res) => {
+        try {
+            const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
+            res.json({totalCarts: totalCarts.count});
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 }

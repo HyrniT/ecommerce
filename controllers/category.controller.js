@@ -2,6 +2,7 @@
 
 const categoryModel = require('../models/category.model');
 const productModel = require('../models/product.model');
+const cartModel = require('../models/cart.model');
 
 module.exports = {
     getProductByCategory: async (req, res) => {
@@ -15,17 +16,34 @@ module.exports = {
         const categories = await categoryModel.getAllCategories();
         const category = await categoryModel.getCategoryById(id);
 
-        res.render('category', {
-            id: id,
-            shop: true,
-            title: 'OGANI | ' + category.name,
-            name: req.user ? req.user.name : null,
-            nameCategory: category.name,
-            products: products,
-            categories: categories,
-            totalProducts: totalProducts.count,
-            totalPages: totalPages,
-            currentPage: page
-        });
+        if (req.user) {
+            const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
+            res.render('category', {
+                id: id,
+                shop: true,
+                title: 'OGANI | ' + category.name,
+                name: req.user.name,
+                nameCategory: category.name,
+                products: products,
+                categories: categories,
+                totalProducts: totalProducts.count,
+                totalPages: totalPages,
+                currentPage: page,
+                totalCarts: totalCarts.count
+            });
+        } else {
+            res.render('category', {
+                id: id,
+                shop: true,
+                title: 'OGANI | ' + category.name,
+                name: null,
+                nameCategory: category.name,
+                products: products,
+                categories: categories,
+                totalProducts: totalProducts.count,
+                totalPages: totalPages,
+                currentPage: page
+            });
+        }
     }
 }

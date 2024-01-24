@@ -103,6 +103,13 @@
             .then(response => {
                 console.log(response);
                 if (response.ok) {
+                    fetch('/cart/getTotalCarts')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('totalCarts').innerText = data.totalCarts;
+                        })
+                        .catch(error => console.error('Error:', error));
+
                     alert('Category added successfully.');
                 } else {
                     console.error('Error:', response.status);

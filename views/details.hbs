@@ -74,6 +74,15 @@
 
 <script>
     function addToCart(productId) {
+        var quantity = parseInt(document.querySelector('.pro-qty input').value);
+
+        if (isNaN(quantity) || quantity <= 0) {
+            alert('Please enter a valid quantity.');
+            return;
+        }
+
+        quantity = quantity || 1;
+
         fetch('/cart/add', {
             method: 'POST',
             headers: {
@@ -81,12 +90,19 @@
             },
             body: JSON.stringify({
                 productId: productId,
-                quantity: 1
+                quantity: quantity
             }),
         })
             .then(response => {
                 console.log(response);
                 if (response.ok) {
+                    fetch('/cart/getTotalCarts')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('totalCarts').innerText = data.totalCarts;
+                        })
+                        .catch(error => console.error('Error:', error));
+
                     alert('Category added successfully.');
                 } else {
                     console.error('Error:', response.status);

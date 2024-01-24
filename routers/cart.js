@@ -10,8 +10,9 @@ const checkLoggedIn = (req, res, next) => {
 }
 
 router.get('/', checkLoggedIn, cartController.getCart);
-router.post('/add', cartController.postAddCart);
+router.post('/add', checkLoggedIn, cartController.postAddCart);
 router.post('/update', checkLoggedIn, cartController.postUpdateCart);
 router.get('/delete', checkLoggedIn, cartController.getDeleteCart);
+router.get('/getTotalCarts', checkLoggedIn, cartController.getTotalCarts);
 
 module.exports = router;

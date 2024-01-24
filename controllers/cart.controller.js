@@ -1,15 +1,18 @@
 const cartModel = require('../models/cart.model');
+const categoryModel = require('../models/category.model');
 
 module.exports = {
     getCart: async (req, res) => {
         const carts = await cartModel.getAllCartsByUser(req.user.id);
         const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
+        const categories = await categoryModel.getAllCategories();
 
         if (req.user) {
             res.render('cart', {
                 cart: true,
                 title: 'OGANI | Cart',
                 name: req.user.name,
+                categories: categories,
                 carts: carts,
                 totalCarts: totalCarts.count
             });
@@ -18,7 +21,7 @@ module.exports = {
                 cart: true,
                 title: 'OGANI | Cart',
                 name: null,
-                carts: carts
+                categories: categories,
             });
         }
     },

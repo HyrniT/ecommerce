@@ -24,17 +24,13 @@
                                     {{product_price}}
                                 </td>
                                 <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="{{quantity}}">
-                                        </div>
-                                    </div>
+                                    {{quantity}}
                                 </td>
                                 <td class="shoping__cart__total">
                                     
                                 </td>
                                 <td class="shoping__cart__item__close">
-                                    <span class="icon_close"></span>
+                                    <a href="/cart/delete?id={{id}}"><i class="fa-solid fa-xmark"></i></a>
                                 </td>
                             </tr>
                             {{/each}}
@@ -44,13 +40,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                        Upadate Cart</a>
-                </div>
-            </div>
             <div class="col-lg-6">
                 <div class="shoping__continue">
                     <div class="shoping__discount">
@@ -66,8 +55,7 @@
                 <div class="shoping__checkout">
                     <h5>Cart Total</h5>
                     <ul>
-                        <li>Subtotal <span>$454.98</span></li>
-                        <li>Total <span>$454.98</span></li>
+                        <li>Total <span></span></li>
                     </ul>
                     <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
@@ -75,3 +63,48 @@
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var cartItems = document.querySelectorAll('.shoping__cart__table tbody tr');
+
+        cartItems.forEach(function (item) {
+            calculateTotalForRow(item);
+        });
+
+        calculateTotalForCart();
+
+        function parseMoneyToFloat(moneyString) {
+            const cleanedMoneyString = moneyString.replace(/[^\d.]/g, '');
+            return parseFloat(cleanedMoneyString);
+        }
+
+        function calculateTotalForRow(item) {
+            var priceElement = item.querySelector('.shoping__cart__price');
+            var quantityElement = item.querySelector('.shoping__cart__quantity');
+            var totalElement = item.querySelector('.shoping__cart__total');
+
+            var price = parseMoneyToFloat(priceElement.textContent.trim());
+            var quantity = parseInt(quantityElement.textContent);
+
+            var total = price * quantity;
+
+            totalElement.textContent = '$' + total.toFixed(2);
+        }
+
+        function calculateTotalForCart() {
+            var totalCartElement = document.querySelector('.shoping__checkout ul li span');
+
+            var totalValues = Array.from(cartItems).map(function (item) {
+                var totalElement = item.querySelector('.shoping__cart__total');
+                return parseFloat(totalElement.textContent.replace('$', '').trim());
+            });
+
+            var totalCart = totalValues.reduce(function (acc, value) {
+                return acc + value;
+            }, 0);
+
+            totalCartElement.textContent = '$' + totalCart.toFixed(2);
+        }
+    });
+</script>

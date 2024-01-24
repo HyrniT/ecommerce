@@ -34,7 +34,6 @@ class Cart {
             INNER JOIN "Products" ON "Carts"."product_id" = "Products"."id"
             WHERE "Carts"."user_id" = $1
         `, [userId]);
-            console.log(result);
             return result;
         } catch (error) {
             throw error;

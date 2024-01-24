@@ -1893,6 +1893,7 @@ ol {
 .shoping__cart__table table tbody tr td.shoping__cart__item img {
 	display: inline-block;
 	margin-right: 25px;
+	height: 100px;
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__item h5 {
@@ -1924,8 +1925,18 @@ ol {
 	cursor: pointer;
 }
 
+.shoping__cart__item__close a i {
+	padding: 5px;
+	color: #000;
+}
+
+.shoping__cart__item__close a:hover i {
+	color: #f00;
+}
+
 .shoping__cart__table table tbody tr td.shoping__cart__quantity {
 	width: 225px;
+	font-weight: 700;
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__quantity .pro-qty {

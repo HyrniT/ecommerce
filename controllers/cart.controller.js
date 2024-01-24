@@ -44,7 +44,8 @@ module.exports = {
     },
     getDeleteCart: async (req, res) => {
         try {
-            const result = await cartModel.deleteCart(req.body.cartId);
+            const id = req.query.id;
+            await cartModel.deleteCart(id);
             res.redirect('/cart');
         } catch (error) {
             console.error('Error:', error);

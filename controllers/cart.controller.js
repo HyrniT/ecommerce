@@ -2,21 +2,25 @@ const cartModel = require('../models/cart.model');
 
 module.exports = {
     getCart: async (req, res) => {
-        const page = parseInt(req.query.page) || 1;
-        const perPage = 5;
-
+        const carts = await cartModel.getAllCartsByUser(req.user.id);
         const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
-        const totalPages = Math.ceil(totalCarts.count / perPage);
-        const carts = await cartModel.getCartsInPageByUser(req.user.id, page, perPage);
 
-        res.render('cart', {
-            title: 'OGANI | Cart',
-            name: req.user ? req.user.name : null,
-            layout: '_',
-            carts: carts,
-            totalPages: totalPages,
-            currentPage: page
-        });
+        if (req.user) {
+            res.render('cart', {
+                cart: true,
+                title: 'OGANI | Cart',
+                name: req.user.name,
+                carts: carts,
+                totalCarts: totalCarts.count
+            });
+        } else {
+            res.render('cart', {
+                cart: true,
+                title: 'OGANI | Cart',
+                name: null,
+                carts: carts
+            });
+        }
     },
     postAddCart: async (req, res) => {
         try {

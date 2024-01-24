@@ -44,7 +44,11 @@
                                 <ul class="product__item__pic__hover">
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                     <li><a href="/product?id={{id}}"><i class="fa-solid fa-eye"></i></a></li>
-                                    <li><a href="#" onclick="addToCart('{{id}}')"><i class="fa fa-shopping-cart"></i></a></li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="addToCartBtn" data-product-id="{{id}}">
+                                            <i class="fa fa-shopping-cart addToCartBtn" data-product-id="{{id}}"></i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
@@ -83,5 +87,43 @@
         }
 
         paginationDiv.appendChild(aElement);
+    });
+
+    function addToCart(productId) {
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: 1
+            }),
+        })
+            .then(response => {
+                console.log(response);
+                if (response.ok) {
+                    alert('Category added successfully.');
+                } else {
+                    console.error('Error:', response.status);
+                    alert('An error occurred while processing your request.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            });
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('addToCartBtn')) {
+            const productId = event.target.getAttribute('data-product-id');
+            if ("{{name}}" != "") {
+                addToCart(productId);
+            } else {
+                alert('Please login to add to cart.');
+                return;
+            }
+        }
     });
 </script>

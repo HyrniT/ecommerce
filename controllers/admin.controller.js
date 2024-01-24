@@ -101,7 +101,7 @@ module.exports = {
             });
         }
     },
-    deleteCategory: async (req, res) => {
+    getDeleteCategory: async (req, res) => {
         try {
             const id = req.query.id;
             const category = await categoryModel.getCategoryById(id);
@@ -170,7 +170,7 @@ module.exports = {
             });
         }
     },
-    deleteProduct: async (req, res) => {
+    getDeleteProduct: async (req, res) => {
         try {
             const id = req.query.id;
             const product = await productModel.getProductById(id);

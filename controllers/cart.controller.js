@@ -1,6 +1,7 @@
 const cartModel = require('../models/cart.model');
 const categoryModel = require('../models/category.model');
 const orderModel = require('../models/order.model');
+const productModel = require('../models/product.model');
 
 module.exports = {
     getCart: async (req, res) => {
@@ -95,7 +96,23 @@ module.exports = {
             const total = req.body.total;
 
             await orderModel.saveOrder(req.user.id, total);
-            await cartModel.deleteAllCartsByUser(req.user.id);
+            const carts = await cartModel.getAllCartsByUser(req.user.id);
+            for (const cart of carts) {
+                const product = await productModel.getProductById(cart.product_id);
+                await cartModel.updateCartStatus(cart.id);
+
+                const newQuantity = product.quantity - cart.quantity;
+
+                await productModel.updateProduct(
+                    product.id, 
+                    product.name, 
+                    product.desc, 
+                    product.price, 
+                    product.img, 
+                    newQuantity, 
+                    product.category_id
+                );
+            }
 
             res.sendStatus(200);
         } catch (error) {

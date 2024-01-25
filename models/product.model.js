@@ -25,6 +25,7 @@ class Product {
                 SELECT "Products".*, "Categories"."name" AS category_name
                 FROM "Products"
                 INNER JOIN "Categories" ON "Products"."category_id" = "Categories"."id"
+                ORDER BY "Products"."id" ASC
             `);
             return result;
         } catch (error) {

@@ -1,5 +1,6 @@
 const cartModel = require('../models/cart.model');
 const categoryModel = require('../models/category.model');
+const orderModel = require('../models/order.model');
 
 module.exports = {
     getCart: async (req, res) => {
@@ -60,6 +61,46 @@ module.exports = {
             res.json({totalCarts: totalCarts.count});
         } catch (error) {
             console.error('Error:', error);
+        }
+    },
+    getCheckout: async (req, res) => {
+        try {
+            const carts = await cartModel.getAllCartsByUser(req.user.id);
+            const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
+            const categories = await categoryModel.getAllCategories();
+
+            if (req.user) {
+                res.render('checkout', {
+                    checkout: true,
+                    title: 'OGANI | Checkout',
+                    name: req.user.name,
+                    categories: categories,
+                    carts: carts,
+                    totalCarts: totalCarts.count
+                });
+            } else {
+                res.render('checkout', {
+                    checkout: true,
+                    title: 'OGANI | Checkout',
+                    name: null,
+                    categories: categories,
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+    postOrder: async (req, res) => {
+        try {
+            const total = req.body.total;
+
+            await orderModel.saveOrder(req.user.id, total);
+            await cartModel.deleteAllCartsByUser(req.user.id);
+
+            res.sendStatus(200);
+        } catch (error) {
+            console.error('Error:', error);
+            res.sendStatus(500);
         }
     }
 }

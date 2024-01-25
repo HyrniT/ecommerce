@@ -43,12 +43,13 @@ class Cart {
     async getCartsInPageByUser(userId, page, perPage) {
         try {
             const result = await db.any(`
-                    SELECT "Carts".*, Products.name AS product_name, Products.price AS product_price, Products.img AS product_img
-                    FROM "Carts"
-                    INNER JOIN "Products" ON "Carts"."product_id" = "Products"."id"
-                    WHERE "Carts"."user_id" = $1
-                    LIMIT $2 OFFSET $3
-                `, [userId, perPage, (page - 1) * perPage]);
+                SELECT "Carts".*, Products.name AS product_name, Products.price AS product_price, Products.img AS product_img
+                FROM "Carts"
+                INNER JOIN "Products" ON "Carts"."product_id" = "Products"."id"
+                WHERE "Carts"."user_id" = $1
+                LIMIT $2 OFFSET $3
+            `, [userId, perPage, (page - 1) * perPage]);
+            return result;
         } catch (error) {
             throw error;
         }

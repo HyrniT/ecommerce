@@ -104,7 +104,7 @@ class User {
 
     async getUsersInPage(page, perPage) {
         try {
-            const result = await db.any('SELECT * FROM "Users" WHERE "username" != $1 LIMIT $2 OFFSET $3', ['admin', perPage, (page - 1) * perPage]);
+            const result = await db.any('SELECT * FROM "Users" WHERE "username" != $1 OR "email" IS NOT NULL LIMIT $2 OFFSET $3', ['admin', perPage, (page - 1) * perPage]);
             return result;
         } catch (error) {
             throw error;

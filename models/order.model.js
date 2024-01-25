@@ -53,6 +53,7 @@ class Order {
             SELECT DATE_PART('month', "Orders"."ordered_date") AS "order_month", SUM(total) AS "total_revenue"
             FROM "Orders"
             GROUP BY DATE_PART('month', "Orders"."ordered_date")
+            ORDER BY DATE_PART('month', "Orders"."ordered_date") ASC
             `)
             return result;
         } catch (error) {

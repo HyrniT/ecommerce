@@ -6,16 +6,16 @@ const passport = require('passport');
 module.exports = {
     getRegister: (req, res) => {
         res.render('register', {
-            messages: res.locals.messages, 
+            messages: res.locals.messages,
             title: 'OGANI | Register',
             layout: 'auth'
         });
     },
     getLogin: (req, res) => {
-        res.render('login', { 
-            messages: res.locals.messages, 
+        res.render('login', {
+            messages: res.locals.messages,
             title: 'OGANI | Login',
-            layout: 'auth' 
+            layout: 'auth'
         });
     },
     postRegister: async (req, res) => {
@@ -35,7 +35,7 @@ module.exports = {
             req.flash('error', 'Password must be at least 3 characters');
             return res.redirect('/auth/register');
         }
-        
+
         try {
             await userModel.createUser(name.trim(), username.trim(), password);
             res.redirect('/auth/login');
@@ -53,16 +53,33 @@ module.exports = {
     // },
     postLogin: (req, res) => {
         passport.authenticate('local', async (err, user) => {
-            req.login(user, async (err) => {
-                if (err) {
+            try {
+                if (!user) {
                     req.flash('error', 'Invalid username or password');
                     return res.redirect('/auth/login');
                 }
-                if (user.isAdmin) {
-                    return res.redirect('/admin');
+
+                if (!user.status) {
+                    req.flash('error', 'User account is locked');
+                    return res.redirect('/auth/login');
                 }
-                return res.redirect('/');
-            });
+
+                req.login(user, async (err) => {
+                    if (err) {
+                        req.flash('error', 'Invalid username or password');
+                        return res.redirect('/auth/login');
+                    }
+
+                    if (user.isAdmin) {
+                        return res.redirect('/admin');
+                    }
+
+                    return res.redirect('/');
+                });
+            } catch (error) {
+                req.flash('error', 'An error occurred during login');
+                return res.redirect('/auth/login');
+            }
         })(req, res);
     },
     getLogout: (req, res) => {

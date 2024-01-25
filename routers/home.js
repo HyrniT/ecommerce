@@ -7,10 +7,11 @@ const productController = require('../controllers/product.controller');
 const cartController = require('../controllers/cart.controller');
 
 const checkLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user.status) {
+        return next();
+    } else {
         return res.redirect('/auth/login');
     }
-    next();
 };
 
 const checkIsAdmin = (req, res, next) => {

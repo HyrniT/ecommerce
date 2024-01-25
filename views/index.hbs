@@ -93,10 +93,12 @@
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById('totalCarts').innerText = data.totalCarts;
+                            alert('Added to cart successfully.');
                         })
-                        .catch(error => console.error('Error:', error));
-
-                    alert('Category added successfully.');
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Added to cart failed.')
+                        });
                 } else {
                     console.error('Error:', response.status);
                     alert('An error occurred while processing your request.');

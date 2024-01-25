@@ -3,11 +3,12 @@ const adminController = require('../controllers/admin.controller');
 const upload = require('../utils/upload');
 
 const checkLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user.status) {
+        return next();
+    } else {
         return res.redirect('/auth/login');
     }
-    next();
-}
+};
 
 const checkIsAdmin = (req, res, next) => {
     if (req.user && !req.user.isAdmin) {

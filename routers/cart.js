@@ -3,11 +3,12 @@ const router = require('express').Router();
 const cartController = require('../controllers/cart.controller');
 
 const checkLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return res.redirect('/auth/login');
+    if (req.isAuthenticated() && req.user.status) {
+        return next();
+    } else {
+        return res.redirect('/');
     }
-    next();
-}
+};
 
 router.get('/', checkLoggedIn, cartController.getCart);
 router.post('/add', checkLoggedIn, cartController.postAddCart);

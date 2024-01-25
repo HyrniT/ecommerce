@@ -46,5 +46,8 @@ router.get('/lock-user', checkLoggedIn, checkIsAdmin, adminController.getLockUse
 router.get('/unlock-user', checkLoggedIn, checkIsAdmin, adminController.getUnlockUser);
 
 router.get('/statistics', checkLoggedIn, checkIsAdmin, adminController.getStatistics);
+router.get('/total-revenue-by-category', adminController.getTotalRevenueByCategory);
+router.get('/total-quantity-by-category', adminController.getTotalQuantityByCategory);
+router.get('/total-revenue-by-month', adminController.getTotalRevenueByMonth);
 
 module.exports = router;

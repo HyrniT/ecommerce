@@ -2,6 +2,7 @@
 
 const categoryModel = require('../models/category.model');
 const productModel = require('../models/product.model');
+const orderModel = require('../models/order.model');
 const userModel = require('../models/user.model');
 const path = require('path');
 const fs = require('fs');
@@ -227,6 +228,39 @@ module.exports = {
             res.status(500).send({
                 message: 'Internal server error.'
             });
+        }
+    },
+    getTotalRevenueByCategory: async (req, res) => {
+        try {
+            const result = await orderModel.getTotalRevenueByCategory();
+            res.status(200).send(result);
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            })
+        }
+    },
+    getTotalQuantityByCategory: async (req, res) => {
+        try {
+            const result = await orderModel.getTotalQuantityByCategory();
+            res.status(200).send(result);
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            })
+        }
+    },
+    getTotalRevenueByMonth: async (req, res) => {
+        try {
+            const result = await orderModel.getTotalRevenueByMonth();
+            res.status(200).send(result);
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            })
         }
     }
 }

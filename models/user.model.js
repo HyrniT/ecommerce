@@ -23,10 +23,10 @@ class User {
 
     async createGoogleUser(email, name) {
         try {
-            const result = await db.one('INSERT INTO "Users" ("email", "name", "status") VALUES ($1) RETURNING "id"', [email, name, true]);
+            const result = await db.one('INSERT INTO "Users" ("email", "name", "status") VALUES ($1, $2, $3) RETURNING "id"', [email, name, true]);
             return result;
         } catch (error) {
-            if (error.code === '42601') {
+            if (error.code === '23505' || error.code === '42601') {
                 const result = await this.getUserByEmail(email);
                 return result;
             }

@@ -1,3 +1,110 @@
-{{!-- views/partials/admin/statistics-admin.hbs --}}
+<!-- views/statistics-admin.hbs -->
 
-<h1>Statistics</h1>
+<h3 class="mt-5">Statistics</h3>
+<div class="container mt-1">
+    <div class="row">
+        <div class="col-6 mt-3">
+            <h5>Total revenue by category</h5>
+            <canvas id="revenueByCategoryChart"></canvas>
+        </div>
+        <div class="col-6 mt-3">
+            <h5>Total quantity by category</h5>
+            <canvas id="quantityByCategoryChart"></canvas>
+        </div>
+        <div class="col-12 my-5">
+            <h5>Total revenue by month</h5>
+            <canvas id="revenueByDayChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function moneyToNumber(moneyString) {
+        return parseFloat(moneyString.replace(/[^0-9.-]+/g, ''));
+    }
+    
+    async function updateCharts() {
+        const categoryRevenueData = await fetch(`/admin/total-revenue-by-category`).then(response => response.json());
+        const categoryQuantityData = await fetch(`/admin/total-quantity-by-category`).then(response => response.json());
+        const monthData = await fetch(`/admin/total-revenue-by-month`).then(response => response.json());
+
+        const revenueByCategoryCtx = document.getElementById('revenueByCategoryChart').getContext('2d');
+        let revenueByCategoryChart = new Chart(revenueByCategoryCtx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'],
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        const quantityByCategoryCtx = document.getElementById('quantityByCategoryChart').getContext('2d');
+        let quantityByCategoryChart = new Chart(quantityByCategoryCtx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800'],
+                }]
+            },
+            options: {
+                responsive: true,
+            }
+        });
+
+        const revenueByDayCtx = document.getElementById('revenueByDayChart').getContext('2d');
+        let revenueByDayChart = new Chart(revenueByDayCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: [],
+                    data: [],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#FF9800',
+                        '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850', '#8e5ea2',
+                        '#3cba9f', '#e8c3b9'
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    },
+                    y: {
+                        beginAtZero: true,
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    }
+                }
+            }
+        });
+
+        revenueByCategoryChart.data.labels = categoryRevenueData.map(item => item.category_name);
+        revenueByCategoryChart.data.datasets[0].data = categoryRevenueData.map(item => moneyToNumber(item.total_revenue));
+        revenueByCategoryChart.update();
+
+        quantityByCategoryChart.data.labels = categoryQuantityData.map(item => item.category_name);
+        quantityByCategoryChart.data.datasets[0].data = categoryQuantityData.map(item => moneyToNumber(item.total_quantity));
+        quantityByCategoryChart.update();
+
+        revenueByDayChart.data.labels = monthData.map(item => item.order_month);
+        revenueByDayChart.data.datasets[0].data = monthData.map(item => moneyToNumber(item.total_revenue));
+        revenueByDayChart.update();
+    };
+
+    updateCharts();
+</script>

@@ -2,6 +2,7 @@
 
 const categoryModel = require('../models/category.model');
 const productModel = require('../models/product.model');
+const userModel = require('../models/user.model');
 const path = require('path');
 const fs = require('fs');
 
@@ -44,10 +45,19 @@ module.exports = {
             currentPage: page
         });
     },
-    getUser: (req, res) => {
+    getUser: async (req, res) => {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 5;
+
+        const totalUsers = await userModel.getTotalNumberOfUsers();
+        const totalPages = Math.ceil(totalUsers.count / perPage);
+        const users = await userModel.getUsersInPage(page, perPage);
+
         res.render('user-admin', { 
-            title: 'OGANI | Users Management',
             layout: '_',
+            users: users,
+            totalPages: totalPages,
+            currentPage: page
         });
     },
     getStatistics: (req, res) => {
@@ -186,6 +196,32 @@ module.exports = {
                     message: 'Product deleted successfully.'
                 });
             })
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    getLockUser: async (req, res) => {
+        try {
+            const id = req.query.id;
+            await userModel.lockUser(id);
+
+            res.redirect('/admin/user');
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send({
+                message: 'Internal server error.'
+            });
+        }
+    },
+    getUnlockUser: async (req, res) => {
+        try {
+            const id = req.query.id;
+            await userModel.unlockUser(id);
+
+            res.redirect('/admin/user');
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send({

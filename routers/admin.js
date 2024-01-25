@@ -42,6 +42,9 @@ router.post('/edit-product', checkLoggedIn, checkIsAdmin, upload.single('image')
 router.get('/delete-product', checkLoggedIn, checkIsAdmin, adminController.getDeleteProduct);
 
 router.get('/user', checkLoggedIn, checkIsAdmin, adminController.getUser);
+router.get('/lock-user', checkLoggedIn, checkIsAdmin, adminController.getLockUser);
+router.get('/unlock-user', checkLoggedIn, checkIsAdmin, adminController.getUnlockUser);
+
 router.get('/statistics', checkLoggedIn, checkIsAdmin, adminController.getStatistics);
 
 module.exports = router;

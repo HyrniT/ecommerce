@@ -92,6 +92,42 @@ class User {
             throw error;
         }
     }
+
+    async getTotalNumberOfUsers() {
+        try {
+            const result = await db.one('SELECT COUNT(*) FROM "Users" WHERE "username" != $1', ['admin']);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getUsersInPage(page, perPage) {
+        try {
+            const result = await db.any('SELECT * FROM "Users" WHERE "username" != $1 LIMIT $2 OFFSET $3', ['admin', perPage, (page - 1) * perPage]);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async lockUser(id) {
+        try {
+            const result = await db.one('UPDATE "Users" SET "status" = $1 WHERE "id" = $2 RETURNING "id"', [false, id]);
+            return result.id;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async unlockUser(id) {
+        try {
+            const result = await db.one('UPDATE "Users" SET "status" = $1 WHERE "id" = $2 RETURNING "id"', [true, id]);
+            return result.id;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 module.exports = new User();

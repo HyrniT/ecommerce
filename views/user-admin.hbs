@@ -1,3 +1,134 @@
 {{!-- views/partials/admin/user-admin.hbs --}}
 
-<h1>Users</h1>
+<h3 class="mt-5">Users</h3>
+<div class="container mt-1">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each users}}
+            <tr id="userRow-{{id}}">
+                <td>{{name}}</td>
+                <td>{{username}}</td>
+                <td>{{email}}</td>
+                {{#if status}}
+                <td style="font-weight: bold;" class="text-success">Active</td>
+                {{else}}
+                <td style="font-weight: bold;" class="text-danger">Locked</td>
+                {{/if}}
+                <td>
+                    {{#if status}}
+                    <button class="btn btn-danger" onclick="lockUser('{{id}}')">
+                        <i class="fa-solid fa-lock"></i>
+                    </button>
+                    {{else}}
+                    <button class="btn btn-success" onclick="unlockUser('{{id}}')">
+                        <i class="fa-solid fa-lock-open"></i>
+                    </button>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<nav>
+    <ul class="pagination pagination-sm">
+    </ul>
+</nav>
+
+<script>
+    $(document).ready(function () {
+        const totalPages = {{ totalPages }};
+    const currentPage = {{ currentPage }};
+
+    const pages = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+    }
+
+    pages.forEach(page => {
+        const pagination = `
+            <li class="page-item ${page === currentPage ? 'active' : ''}">
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(${page})">${page}</a>
+            </li>
+            `;
+
+        $('.pagination').append(pagination);
+    });
+    });
+
+    function loadPage(page) {
+        $.ajax({
+            url: `/admin/user?page=${page}`,
+            method: 'GET',
+            dataType: 'html',
+            success: function (data) {
+                $('#content').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+
+    function lockUser(userId) {
+        const confirmLock = window.confirm("Are you sure you want to lock this user?");
+
+        if (confirmLock) {
+            fetch(`/admin/lock-user?id=${userId}`, {
+                method: 'GET'
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        const userRow = $(`#userRow-${userId}`);
+                        userRow.find('td:nth-child(4)').text('Locked').removeClass('text-success').addClass('text-danger');
+                        userRow.find('td:nth-child(5)').html(`
+                            <button class="btn btn-success" onclick="unlockUser('${userId}')">
+                                <i class="fa-solid fa-lock-open"></i>
+                            </button>
+                        `);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your request.');
+                });
+        }
+    }
+
+    function unlockUser(userId) {
+        const confirmUnlock = window.confirm("Are you sure you want to unlock this user?");
+
+        if (confirmUnlock) {
+            fetch(`/admin/unlock-user?id=${userId}`, {
+                method: 'GET'
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        const userRow = $(`#userRow-${userId}`);
+                        userRow.find('td:nth-child(4)').text('Active').removeClass('text-danger').addClass('text-success');
+                        userRow.find('td:nth-child(5)').html(`
+                            <button class="btn btn-danger" onclick="lockUser('${userId}')">
+                                <i class="fa-solid fa-lock"></i>
+                            </button>
+                        `);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while processing your request.');
+                });
+        }
+    }
+</script>

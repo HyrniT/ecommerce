@@ -102,7 +102,6 @@
     function placeOrder(event) {
         event.preventDefault();
         var total = document.querySelector('.checkout__order__total span').textContent;
-        console.log(total);
         fetch('/order', {
             method: 'POST',
             headers: {

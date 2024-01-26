@@ -26,7 +26,8 @@ router.get('/shop', checkIsAdmin, homeController.getShop);
 router.get('/category', checkIsAdmin, categoryController.getProductByCategory);
 router.get('/search', checkIsAdmin, homeController.getSearch);
 router.get('/product', checkIsAdmin, productController.getProduct);
-router.get('/checkout', checkLoggedIn, cartController.getCheckout);
-router.post('/order', checkLoggedIn, cartController.postOrder);
+router.get('/checkout', checkLoggedIn, checkIsAdmin, cartController.getCheckout);
+router.post('/order', checkLoggedIn, checkIsAdmin, cartController.postOrder);
+router.get('/contact', checkIsAdmin, homeController.getContact);
 
 module.exports = router;

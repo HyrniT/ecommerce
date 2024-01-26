@@ -102,4 +102,25 @@ module.exports = {
             });
         }
     },
+    getContact: async (req, res) => {
+        const categories = await categoryModel.getAllCategories();
+
+        if (req.user) {
+            const totalCarts = await cartModel.getTotalNumberOfCartsByUser(req.user.id);
+            res.render('contact', { 
+                contact: true,
+                title: 'OGANI | Contact',
+                name: req.user.name,
+                categories: categories,
+                totalCarts: totalCarts.count
+            });
+        } else {
+            res.render('contact', { 
+                contact: true,
+                title: 'OGANI | Contact',
+                categories: categories,
+                name: null
+            });
+        }
+    }
 }

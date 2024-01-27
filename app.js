@@ -7,6 +7,8 @@ const session = require('express-session')
 const passport = require('./utils/passport')
 const path = require('path')
 const router = require('./routers/index')
+const https = require('https')
+const fs = require('fs')
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -39,6 +41,16 @@ app.set('views', path.join(__dirname, 'views'));
 
 router(app)
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+const credentials = {
+    key: fs.readFileSync('private-key.pem'),
+    cert: fs.readFileSync('certificate.pem')
+};
+
+
+// app.listen(port, () => {
+//     console.log(`Server is running on http://localhost:${port}`);
+// });
+
+https.createServer(credentials, app).listen(port, () => {
+    console.log(`Server is running on https://localhost:${port}`);
 });

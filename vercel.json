@@ -11,8 +11,5 @@
             "src": "/(.*)",
             "dest": "/"
         }
-    ],
-    "env": {
-        "CUSTOM_ENV_VARIABLE": "value"
-    }
+    ]
 }

@@ -11,7 +11,7 @@ class User {
     async createUser(name, username, password) {
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-            const result = await db.one('INSERT INTO "Users" ("username", "password", "name", "status") VALUES ($1, $2, $3) RETURNING "id"', [username, hashedPassword, name, true]);
+            const result = await db.one('INSERT INTO "Users" ("username", "password", "name", "status") VALUES ($1, $2, $3, $4) RETURNING "id"', [username, hashedPassword, name, true]);
             return result;
         } catch (error) {
             if (error.code === '23505') {

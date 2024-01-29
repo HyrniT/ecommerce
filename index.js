@@ -41,16 +41,16 @@ app.set('views', path.join(__dirname, 'views'));
 
 router(app)
 
-const credentials = {
-    key: fs.readFileSync('private-key.pem'),
-    cert: fs.readFileSync('certificate.pem')
-};
+// const credentials = {
+//     key: fs.readFileSync('private-key.pem'),
+//     cert: fs.readFileSync('certificate.pem')
+// };
 
 
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
-
-https.createServer(credentials, app).listen(port, () => {
-    console.log(`Server is running on https://localhost:${port}`);
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
+
+// https.createServer(credentials, app).listen(port, () => {
+//     console.log(`Server is running on https://localhost:${port}`);
+// });
